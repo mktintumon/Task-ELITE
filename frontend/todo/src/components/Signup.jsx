@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState  ,useEffect } from "react";
 import axios from "axios";
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -19,8 +19,16 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verify, setVerify] = useState(false);
+  const [submit , setSubmit] = useState(false);
+
 
   const navigateTo = useNavigate();
+
+  useEffect(()=>{
+    if(name.length && email.length && password.length && verify){
+      setSubmit(true);
+    }
+  },[name , email , password , verify])
 
   function onChange(value) {
     setVerify(true);
@@ -126,7 +134,7 @@ export default function Signup() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                disabled={!verify}
+                disabled={!submit}
               >
                 Register
               </Button>
