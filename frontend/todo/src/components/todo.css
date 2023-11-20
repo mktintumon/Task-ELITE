@@ -1,0 +1,110 @@
+.todo-app {
+    max-width: 600px;
+    margin: auto;
+    padding: 30px;
+    background-color: #c8d4da;
+    border-radius: 10px;
+    margin-top: 6rem;
+    box-shadow: 0 0 20px rgba(2, 0, 5, 0.1);
+  }
+  
+  .add-task {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .add-task input {
+    flex: 1;
+    padding: 10px;
+    height: 1.8rem;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  
+  .add-task button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    height: 3rem;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .add-task button:hover {
+    background-color: #218838;
+  }
+  
+  .task-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .task-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    padding: 10px;
+    padding-left: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+  }
+
+  .task-buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+  
+  .task-buttons button {
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-btn{
+    background-color: darkgoldenrod;
+    width: 4rem;
+  }
+
+  .delete-btn{
+    background-color: red;
+    width: 4rem;
+  }
+
+  .save-btn{
+    background-color: #218838;
+    color:white;
+    width: 5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 5rem;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+
+  .edit-text{
+    border: none;
+    outline: none;
+    height: 2rem;
+    width: 22rem;
+  }
+  
+  
+  

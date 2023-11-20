@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .centered-content {
+    text-align: center;
+  }
+  
+  .todo-image {
+    width: 100%;
+    max-width: 500px; /* Adjust the max-width as needed */
+    border-radius: 10px; /* Optional: Add some border-radius for a nicer look */
+    margin-top: 20px; /* Optional: Adjust the top margin */
+  }
+
+  h2{
+    color: red;
+  }
+  
