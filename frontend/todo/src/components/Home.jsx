@@ -11,7 +11,7 @@ const Home = () => {
           alt="Todo List"
           className="todo-image"
         />
-        <h2>Please Login/Register To Create Your Todo</h2>
+        <h3>Please Login/Register To Create Your Todo</h3>
       </div>
     </div>
   );

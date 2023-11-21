@@ -18,7 +18,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [verify, setVerify] = useState(false);
-  const [submit , setSubmit] = useState(false);
+  const [submit, setSubmit] = useState(false);
 
   const navigateTo = useNavigate();
 
@@ -26,11 +26,11 @@ export default function Login() {
     setVerify(true);
   }
 
-  useEffect(()=>{
-    if(email.length && password.length && verify){
+  useEffect(() => {
+    if (email.length && password.length && verify) {
       setSubmit(true);
     }
-  },[email , password , verify])
+  }, [email, password, verify]);
 
   async function save(event) {
     event.preventDefault();
@@ -47,7 +47,7 @@ export default function Login() {
 
         setEmail("");
         setPassword("");
-        navigateTo("/todo");
+        navigateTo("/todo", { state: { userId: response.data.userId } });
         window.location.reload();
       } else {
         alert("Incorrect Email / password");
@@ -117,7 +117,6 @@ export default function Login() {
                   setPassword(e.target.value);
                 }}
               />
-      
 
               <ReCAPTCHA
                 sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}

@@ -30,7 +30,7 @@ export default function Signup() {
     }
   },[name , email , password , verify])
 
-  function onChange(value) {
+  function onChange() {
     setVerify(true);
   }
 

@@ -43,7 +43,7 @@ export default function Navbar() {
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
-            onClick={() => navigateTo(isLoggedIn ? "/todo" : "/")}
+            onClick={() => navigateTo(isLoggedIn ? "/todo" : "/" , {state : {userId : localStorage.getItem("userId")} } )}
             style={{ cursor: "pointer" }}
           >
             Task ELITE

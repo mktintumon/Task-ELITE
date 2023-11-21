@@ -3,6 +3,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    margin-top: 1rem;
   }
   
   .centered-content {
@@ -10,13 +11,13 @@
   }
   
   .todo-image {
-    width: 100%;
+    width: 90%;
     max-width: 500px; /* Adjust the max-width as needed */
     border-radius: 10px; /* Optional: Add some border-radius for a nicer look */
-    margin-top: 20px; /* Optional: Adjust the top margin */
+    margin-top: 5px; /* Optional: Adjust the top margin */
   }
 
-  h2{
+  h3{
     color: red;
   }
   

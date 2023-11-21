@@ -1,13 +1,14 @@
 package com.todo.controllers;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,26 +22,33 @@ public class TodoController {
     @Autowired
     TodoService todoService;
 
-    @GetMapping("/todos")
-    public List<Todo> getTodos() {
-        return this.todoService.getAllTodos();
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<Todo> createTodo(@PathVariable int userId, @RequestBody Todo todo) {
+        Todo createdTodo = todoService.createTodo(userId, todo);
+        return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
     }
 
-    @GetMapping("/todos/{todoId}")
-    public Optional<Todo> getTodoById(@PathVariable("todoId") Integer todoId) {
-        return this.todoService.getTodoById(todoId);
+    @GetMapping("/todos/user/{userId}")
+    public ResponseEntity<List<Todo>> getAllTodosForUser(@PathVariable Integer userId) {
+        List<Todo> todos = todoService.getAllTodosByUser(userId);
+        return new ResponseEntity<>(todos, HttpStatus.OK);
     }
 
+    // @GetMapping("/todos/{todoId}")
+    // public Optional<Todo> getTodoById(@PathVariable("todoId") Integer todoId) {
+    //     return this.todoService.getTodoById(todoId);
+    // }
 
-    @DeleteMapping("/todos/{todoId}")
-    public void deleteTodo(@PathVariable("todoId") Integer todoId) {
-        this.todoService.deleteTodo(todoId);
+
+    @DeleteMapping("/todos/{userId}/{todoId}")
+    public void deleteTodo( @PathVariable("userId") Integer userId,@PathVariable("todoId") Integer todoId ) {
+        this.todoService.deleteTodo(userId , todoId);
     }
 
-    @PutMapping("/todos/{id}")
-    public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo, @PathVariable("todoId") int todoId) {
-        this.todoService.updateTodo(todo, todoId);
-        return ResponseEntity.ok().body(todo);
+    @PutMapping("/todos/{userId}/{todoId}")
+    public ResponseEntity<Todo> updateTodo(@PathVariable Integer userId,@PathVariable Integer todoId,@RequestBody Todo todo) {
+        Todo updatedTodo = todoService.updateTodo(userId, todoId, todo);
+        return new ResponseEntity<>(updatedTodo, HttpStatus.OK);
     }
 
 }

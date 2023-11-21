@@ -1,9 +1,7 @@
 package com.todo.entities;
 
 import java.util.Date;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,11 +23,12 @@ public class Todo {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "email", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Todo() {
+
     }
 
     public Todo(String body, User user) {
