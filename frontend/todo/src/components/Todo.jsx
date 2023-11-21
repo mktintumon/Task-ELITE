@@ -101,7 +101,7 @@ const Todo = () => {
         <input
           type="text"
           placeholder="Enter a new task"
-          value={newTask}
+          value={newTask || ""}
           onChange={(e) => setNewTask(e.target.value)}
         />
         <button onClick={addTask}>Add Task</button>
