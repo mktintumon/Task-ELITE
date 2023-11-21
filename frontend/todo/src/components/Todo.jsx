@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import Loader from "./Loader";
 import axios from "axios";
 import "./todo.css";
 
