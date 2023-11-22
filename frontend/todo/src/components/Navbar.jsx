@@ -8,18 +8,19 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 export default function Navbar() {
-  const userName = localStorage.getItem("userData");
-  const key = "userData";
+  const userName = localStorage.getItem("username");
+  const key = "userId";
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem(key) !== null
   );
   const navigateTo = useNavigate();
 
   const handleSignOut = () => {
-    localStorage.removeItem("userData");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("username");
     setIsLoggedIn(false);
 
     navigateTo("/login");
@@ -43,7 +44,7 @@ export default function Navbar() {
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
-            //onClick={() => navigateTo(isLoggedIn ? "/todo" : "/" , {state : {userId : localStorage.getItem("userId")} } )}
+            onClick={() => navigateTo("/")}
             style={{ cursor: "pointer" }}
           >
             Task ELITE

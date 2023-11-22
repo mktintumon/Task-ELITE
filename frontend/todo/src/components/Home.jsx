@@ -1,7 +1,10 @@
-import React from 'react';
-import './home.css'; 
+import React from "react";
+import "./home.css";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigateTo = useNavigate();
   return (
     <div className="container">
       <div className="centered-content">
@@ -11,7 +14,19 @@ const Home = () => {
           alt="Todo List"
           className="todo-image"
         />
-        <h3>Please Login/Register To Create Your Todo</h3>
+        {localStorage.getItem("userId") != null ? (
+          <h3>
+            <Link
+              onClick={navigateTo("/todo", {
+                state: { userId: localStorage.getItem("userId") },
+              })}
+            >
+              Go to Todo dashboard
+            </Link>
+          </h3>
+        ) : (
+          <h3>Please Login/Register To Create Your Todo</h3>
+        )}
       </div>
     </div>
   );

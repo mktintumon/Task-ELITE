@@ -10,27 +10,35 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ReCAPTCHA from "react-google-recaptcha";
+import RotateRightIcon from "@mui/icons-material/RotateRight";
+//import ReCAPTCHA from "react-google-recaptcha";
 
 const defaultTheme = createTheme();
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [verify, setVerify] = useState(false);
+  const [captcha, setCaptcha] = useState("");
+  const [url, setUrl] = useState("");
+  const [refresh , setRefresh] = useState(false)
   const [submit, setSubmit] = useState(false);
 
   const navigateTo = useNavigate();
 
-  function onChange() {
-    setVerify(true);
-  }
-
   useEffect(() => {
-    if (email.length && password.length && verify) {
+    if (email.length && password.length && captcha.length) {
       setSubmit(true);
     }
-  }, [email, password, verify]);
+  }, [email, password, captcha]);
+
+  useEffect(() => {
+    const getImage = async () => {
+      const response = await axios.get("http://localhost:8081/captcha");
+      setUrl(response.data.imageUrl);
+    };
+
+    getImage();
+  }, [refresh]);
 
   async function save(event) {
     event.preventDefault();
@@ -42,8 +50,10 @@ export default function Login() {
       console.log(response);
 
       if (response.data !== "") {
-        const userData = response.data.userName;
-        localStorage.setItem("userData", JSON.stringify(userData));
+        const username = response.data.userName;
+        const userId = response.data.userId
+        localStorage.setItem("username", JSON.stringify(username));
+        localStorage.setItem("userId", JSON.stringify(userId));
 
         setEmail("");
         setPassword("");
@@ -60,10 +70,10 @@ export default function Login() {
   return (
     <div
       style={{
-        padding: "4rem",
+        paddingTop: "3.6rem",
         border: "2px solid #455d7a",
         borderRadius: "2rem",
-        width: "30rem",
+        width: "35rem",
         height: "30rem",
         margin: "auto",
         marginTop: "7rem",
@@ -118,11 +128,38 @@ export default function Login() {
                 }}
               />
 
-              <ReCAPTCHA
+              {/* <ReCAPTCHA
                 sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                 type="image"
                 onChange={onChange}
-              />
+              /> */}
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+              >
+                <TextField
+                  required
+                  margin="normal"
+                  fullWidth
+                  name="captcha"
+                  label="Enter captcha"
+                  type="text"
+                  id="captcha"
+                  onChange={(e) => {
+                    setCaptcha(e.target.value);
+                  }}
+                />
+                <img
+                  src={url}
+                  alt="captcha"
+                  height="50rem"
+                  width="150rem"
+                  style={{ borderRadius: "1rem", marginTop: "0.6rem" }}
+                />
+                <RotateRightIcon
+                  onClick={() => setRefresh(!refresh)}
+                  style={{ marginTop: "0.6rem", fontSize: "2.5rem" }}
+                />
+              </div>
 
               <Button
                 onClick={save}
@@ -138,7 +175,7 @@ export default function Login() {
                   <Link
                     href="/signup"
                     variant="body2"
-                    style={{ marginLeft: "1.5rem", fontSize: "1rem" }}
+                    style={{ marginLeft: "3.5rem", fontSize: "1rem" }}
                   >
                     {"Don't have an account? REGISTER"}
                   </Link>

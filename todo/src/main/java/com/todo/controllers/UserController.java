@@ -2,6 +2,7 @@ package com.todo.controllers;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.todo.entities.CaptchaResponse;
 import com.todo.entities.User;
+import com.todo.services.CaptchaService;
 import com.todo.services.UserService;
 
 
@@ -22,10 +25,20 @@ public class UserController {
     @Autowired
     UserService userService; 
 
+    @Autowired
+    CaptchaService captchaService;
+
+    @GetMapping("/captcha")
+    public CaptchaResponse generateCaptcha() {
+        return new CaptchaResponse(captchaService.generateCaptchaImage());
+    }
+
+
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+    public ResponseEntity<?> createUser(@RequestBody User user){
         return userService.saveUser(user);
     }
+    
 
     @GetMapping("/users")
     public List<User> getUsers() {

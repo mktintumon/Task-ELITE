@@ -6,12 +6,11 @@ import "./todo.css";
 const Todo = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
-  const location = useLocation();
-  const userId = location.state.userId;
-  console.log(userId);
+  const userId = localStorage.getItem("userId")
+
+  console.log(localStorage.getItem("_grecaptcha"));
 
   useEffect(() => {
-    
     const getAllTodos = async () => {
       try {
         const response = await axios.get(`http://localhost:8081/todos/user/${userId}`);

@@ -8,9 +8,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import { useState  ,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import ReCAPTCHA from "react-google-recaptcha";
+import RotateRightIcon from "@mui/icons-material/RotateRight";
+//import ReCAPTCHA from "react-google-recaptcha";
 
 const defaultTheme = createTheme();
 
@@ -18,21 +19,31 @@ export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [verify, setVerify] = useState(false);
-  const [submit , setSubmit] = useState(false);
-
+  const [submit, setSubmit] = useState(false);
+  const [captcha, setCaptcha] = useState("");
+  const [refresh, setRefresh] = useState(false);
+  const [url, setUrl] = useState("");
 
   const navigateTo = useNavigate();
 
-  useEffect(()=>{
-    if(name.length && email.length && password.length && verify){
+  useEffect(() => {
+    if (name.length && email.length && password.length && captcha.length) {
       setSubmit(true);
     }
-  },[name , email , password , verify])
+  }, [name, email, password, captcha]);
 
-  function onChange() {
-    setVerify(true);
-  }
+  // function onChange() {
+  //   setVerify(true);
+  // }
+
+  useEffect(() => {
+    const getImage = async () => {
+      const response = await axios.get("http://localhost:8081/captcha");
+      setUrl(response.data.imageUrl);
+    };
+
+    getImage();
+  }, [refresh]);
 
   async function save(event) {
     event.preventDefault();
@@ -59,8 +70,8 @@ export default function Signup() {
         paddingTop: "3.5rem",
         border: "2px solid #455d7a",
         borderRadius: "2rem",
-        width: "35rem",
-        height: "32rem",
+        width: "38rem",
+        height: "33rem",
         margin: "auto",
         marginTop: "6rem",
         boxShadow: "5px 5px 5px 5px  gray",
@@ -80,7 +91,13 @@ export default function Signup() {
             <Typography component="h1" variant="h4">
               Register
             </Typography>
-            <Box component="form" onSubmit={save} noValidate sx={{ mt: 0 }} style={{ height: '20px' }}>
+            <Box
+              component="form"
+              onSubmit={save}
+              noValidate
+              sx={{ mt: 0 }}
+              style={{ height: "20px" }}
+            >
               <TextField
                 required
                 margin="normal"
@@ -105,7 +122,6 @@ export default function Signup() {
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
-                
               />
               <TextField
                 required
@@ -118,16 +134,43 @@ export default function Signup() {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
-                
               />
 
-              <ReCAPTCHA
+              {/* <ReCAPTCHA
                 sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
                 type="image"
                 onChange={onChange}
                 style={{marginLeft:"3rem"}}
                 disabled
-              />
+              /> */}
+
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+              >
+                <TextField
+                  required
+                  margin="normal"
+                  fullWidth
+                  name="captcha"
+                  label="Enter captcha"
+                  type="text"
+                  id="captcha"
+                  onChange={(e) => {
+                    setCaptcha(e.target.value);
+                  }}
+                />
+                <img
+                  src={url}
+                  alt="captcha"
+                  height="50rem"
+                  width="150rem"
+                  style={{ borderRadius: "1rem", marginTop: "0.6rem" }}
+                />
+                <RotateRightIcon
+                  onClick={() => setRefresh(!refresh)}
+                  style={{ marginTop: "0.6rem", fontSize: "2.5rem" }}
+                />
+              </div>
 
               <Button
                 type="submit"
@@ -140,7 +183,11 @@ export default function Signup() {
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="/login" variant="body2" style={{marginLeft:"5rem" , fontSize:"1rem"}}>
+                  <Link
+                    href="/login"
+                    variant="body2"
+                    style={{ marginLeft: "5rem", fontSize: "1rem" }}
+                  >
                     {"Already have an account? Login"}
                   </Link>
                 </Grid>

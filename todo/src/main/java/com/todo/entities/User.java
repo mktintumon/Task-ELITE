@@ -5,7 +5,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import lombok.Data;
 
+@Data
 @Entity
 @Table
 public class User {
@@ -21,14 +24,12 @@ public class User {
 
     }
 
-
     public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
         this.password = password;
         
     }
-
 
     public Integer getUserId() {
         return userId;
@@ -61,4 +62,13 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Transient
+	private String captcha;
+	
+	@Transient
+	private String hiddenCaptcha;
+	
+	@Transient
+	private String realCaptcha;
 }
