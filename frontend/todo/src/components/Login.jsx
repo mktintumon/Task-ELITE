@@ -22,8 +22,13 @@ export default function Login() {
   const [url, setUrl] = useState("");
   const [refresh , setRefresh] = useState(false)
   const [submit, setSubmit] = useState(false);
+  const [random, setRandom] = useState(0);
 
   const navigateTo = useNavigate();
+
+  const randomNumberInRange = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
   useEffect(() => {
     if (email.length && password.length && captcha.length) {
@@ -32,9 +37,12 @@ export default function Login() {
   }, [email, password, captcha]);
 
   useEffect(() => {
+    const randNum = randomNumberInRange(1,5000);
+    setRandom(randNum);
     const getImage = async () => {
-      const response = await axios.get("http://localhost:8081/captcha");
-      setUrl(response.data.imageUrl);
+      const response = await axios.get(`http://localhost:8081/captcha/${random}`);
+      const imageUrl = response.data.imageUrl;
+      setUrl(imageUrl);
     };
 
     getImage();
@@ -44,12 +52,16 @@ export default function Login() {
     event.preventDefault();
     try {
       const response = await axios.get(
-        `http://localhost:8081/login/${email}/${password}`
+        "http://localhost:8081/login",{
+            email : email,
+            password : password,
+            captcha : captcha
+        },
       );
 
       console.log(response);
 
-      if (response.data !== "") {
+      if (response.data != null) {
         const username = response.data.userName;
         const userId = response.data.userId
         localStorage.setItem("username", JSON.stringify(username));
@@ -60,7 +72,7 @@ export default function Login() {
         navigateTo("/todo", { state: { userId: response.data.userId } });
         window.location.reload();
       } else {
-        alert("Incorrect Email / password");
+        alert("wrong captcha");
       }
     } catch (error) {
       alert("Incorrect Email / password");
@@ -149,7 +161,7 @@ export default function Login() {
                   }}
                 />
                 <img
-                  src={url}
+                  src={`data:image/png;base64,${url}`}
                   alt="captcha"
                   height="50rem"
                   width="150rem"

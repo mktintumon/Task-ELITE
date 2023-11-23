@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./todo.css";
 
@@ -24,11 +23,6 @@ const Todo = () => {
 
     getAllTodos();
   }, [userId]);
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
 
 
   async function addTask() {

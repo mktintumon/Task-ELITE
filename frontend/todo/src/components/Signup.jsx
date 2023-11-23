@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
-//import ReCAPTCHA from "react-google-recaptcha";
 
 const defaultTheme = createTheme();
 
@@ -22,7 +21,12 @@ export default function Signup() {
   const [submit, setSubmit] = useState(false);
   const [captcha, setCaptcha] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [random, setRandom] = useState(0);
   const [url, setUrl] = useState("");
+
+  const randomNumberInRange = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
   const navigateTo = useNavigate();
 
@@ -32,33 +36,41 @@ export default function Signup() {
     }
   }, [name, email, password, captcha]);
 
-  // function onChange() {
-  //   setVerify(true);
-  // }
-
   useEffect(() => {
+    const randNum = randomNumberInRange(1,5000);
+    setRandom(randNum);
+    console.log(randNum);
     const getImage = async () => {
-      const response = await axios.get("http://localhost:8081/captcha");
-      setUrl(response.data.imageUrl);
+      const response = await axios.get(`http://localhost:8081/captcha/${randNum}`);
+      const imageUrl = response.data.imageUrl;
+      setUrl(imageUrl);
     };
 
     getImage();
+    randomNumberInRange(1,5000)
   }, [refresh]);
 
   async function save(event) {
     event.preventDefault();
+    
     try {
-      await axios.post("http://localhost:8081/register", {
+      console.log(random);
+      const response = await axios.post(`http://localhost:8081/register/${random}`, {
         userName: name,
         email: email,
         password: password,
+        captcha: captcha,
       });
-      alert("Registration Successful😊👌");
 
-      setName("");
-      setEmail("");
-      setPassword("");
-      navigateTo("/login", { state: { email: email } });
+      if (response.data == "success") {
+        alert("Registration Successful😊👌");
+        setName("");
+        setEmail("");
+        setPassword("");
+        navigateTo("/login", { state: { email: email } });
+      } else {
+        alert("wrong captcha");
+      }
     } catch (err) {
       alert("User Registation Failed😢");
     }
@@ -160,7 +172,7 @@ export default function Signup() {
                   }}
                 />
                 <img
-                  src={url}
+                  src={`data:image/png;base64,${url}`}
                   alt="captcha"
                   height="50rem"
                   width="150rem"

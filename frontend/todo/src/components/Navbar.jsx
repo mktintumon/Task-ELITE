@@ -21,6 +21,7 @@ export default function Navbar() {
   const handleSignOut = () => {
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
+    localStorage.removeItem("tasks");
     setIsLoggedIn(false);
 
     navigateTo("/login");
