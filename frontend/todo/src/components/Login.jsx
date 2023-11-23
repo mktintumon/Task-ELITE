@@ -20,7 +20,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [captcha, setCaptcha] = useState("");
   const [url, setUrl] = useState("");
-  const [refresh , setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
   const [submit, setSubmit] = useState(false);
   const [random, setRandom] = useState(0);
 
@@ -37,33 +37,34 @@ export default function Login() {
   }, [email, password, captcha]);
 
   useEffect(() => {
-    const randNum = randomNumberInRange(1,5000);
+    const randNum = randomNumberInRange(1, 5000);
     setRandom(randNum);
+    console.log(randNum);
     const getImage = async () => {
-      const response = await axios.get(`http://localhost:8081/captcha/${random}`);
+      const response = await axios.get(
+        `http://localhost:8081/captcha/${randNum}`
+      );
       const imageUrl = response.data.imageUrl;
       setUrl(imageUrl);
     };
 
     getImage();
+    randomNumberInRange(1, 5000);
   }, [refresh]);
 
   async function save(event) {
     event.preventDefault();
     try {
+      console.log(random);
       const response = await axios.get(
-        "http://localhost:8081/login",{
-            email : email,
-            password : password,
-            captcha : captcha
-        },
+        `http://localhost:8081/login/${email}/${password}/${captcha}/${random}`
       );
 
       console.log(response);
 
-      if (response.data != null) {
+      if (response.data.userId !== undefined) {
         const username = response.data.userName;
-        const userId = response.data.userId
+        const userId = response.data.userId;
         localStorage.setItem("username", JSON.stringify(username));
         localStorage.setItem("userId", JSON.stringify(userId));
 

@@ -62,7 +62,7 @@ export default function Signup() {
         captcha: captcha,
       });
 
-      if (response.data == "success") {
+      if (response.data === "success") {
         alert("Registration Successful😊👌");
         setName("");
         setEmail("");

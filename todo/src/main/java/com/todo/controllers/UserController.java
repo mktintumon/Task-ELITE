@@ -20,20 +20,19 @@ import com.todo.services.UserService;
 
 import cn.apiclub.captcha.Captcha;
 
-
-@RestController   
+@RestController
 @CrossOrigin("*")
 public class UserController {
 
-    private HashMap<Integer,String> hm = new HashMap<>();
+    private HashMap<Integer, String> hm = new HashMap<>();
 
     @Autowired
-    UserService userService; 
+    UserService userService;
 
     @Autowired
     CaptchaService captchaService;
 
-    private void setUpCaptcha(User user){
+    private void setUpCaptcha(User user) {
         Captcha captcha = CaptchaService.createCaptcha(200, 50);
         user.setHiddenCaptcha(captcha.getAnswer());
         user.setCaptcha("");
@@ -46,26 +45,24 @@ public class UserController {
     public CaptchaResponse generateCaptcha(@PathVariable("randomId") int randomId) {
         captcha = CaptchaService.createCaptcha(200, 50);
         System.out.println(captcha.getAnswer());
-        hm.put(randomId,captcha.getAnswer());
+        hm.put(randomId, captcha.getAnswer());
         return new CaptchaResponse(captchaService.encodeCaptcha(captcha));
     }
 
-
     @PostMapping("/register/{randomId}")
-    public ResponseEntity<?> createUser(@PathVariable("randomId") int randomId ,@RequestBody User user){
+    public ResponseEntity<?> createUser(@PathVariable("randomId") int randomId, @RequestBody User user) {
 
         String code = hm.get(randomId);
         System.out.println(code);
         System.out.println(user.getCaptcha());
 
-        if(user.getCaptcha().equals(code)){
+        if (user.getCaptcha().equals(code)) {
             userService.saveUser(user);
             return ResponseEntity.ok("success");
         }
         setUpCaptcha(user);
         return ResponseEntity.ok("failed");
     }
-    
 
     @GetMapping("/users")
     public List<User> getUsers() {
@@ -82,15 +79,16 @@ public class UserController {
         return this.userService.getUserByEmail(email);
     }
 
-    @GetMapping("/login")
-    public User getUserByEmailAndPassword(@RequestBody User user) {
-        user.setHiddenCaptcha(captcha.getAnswer());
-        System.out.println(user.getCaptcha());
-        System.out.println(user.getHiddenCaptcha());
-        if(user.getCaptcha().equals(user.getHiddenCaptcha())){
-           return this.userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword());
+    @GetMapping("/login/{email}/{password}/{captcha}/{randomId}")
+    public User getUserByEmailAndPassword(@PathVariable("email") String email, @PathVariable("password") String password,
+            @PathVariable("captcha") String captcha, @PathVariable("randomId") int randomId) {
+        String code = hm.get(randomId);
+        System.out.println(code);
+        System.out.println(captcha);
+
+        if (captcha.equals(code)) {
+            return this.userService.getUserByEmailAndPassword(email,password);
         }
-        setUpCaptcha(user);
         return null;
     }
 
