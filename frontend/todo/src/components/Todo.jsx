@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import "./todo.css";
 
 const Todo = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [rerender, setRerender] = useState(false);
   const userId = localStorage.getItem("userId")
 
   console.log(localStorage.getItem("_grecaptcha"));
@@ -22,7 +25,7 @@ const Todo = () => {
     };
 
     getAllTodos();
-  }, [userId]);
+  }, [userId,rerender]);
 
 
   async function addTask() {
@@ -38,9 +41,10 @@ const Todo = () => {
         ...tasks,
         { id: response.data.todoId, text: newTask, isEditing: false },
       ]);
-      //getAllTodos();
+      toast.success("Task Added",{autoClose: 2000});
       setNewTask("");
-      window.location.reload();
+      setRerender(!rerender);
+      //window.location.reload();
     }
   }
 
@@ -48,7 +52,9 @@ const Todo = () => {
     await axios.delete(`http://localhost:8081/todos/${userId}/${id}`);
     const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
-    window.location.reload();
+    toast.error("Task Deleted",{autoClose: 2000});
+    setRerender(!rerender);
+    //window.location.reload();
   }
 
   const handleEdit = (id) => {
@@ -74,7 +80,9 @@ const Todo = () => {
     );
 
     setTasks(updatedTasks);
-    window.location.reload();
+    toast("Task Updated",{autoClose: 2000})
+    setRerender(!rerender);
+    //window.location.reload();
   }
 
   const handleInputChange = (id, value) => {
@@ -140,6 +148,7 @@ const Todo = () => {
         ))}
       </ul>
     </div>
+    <ToastContainer />
     </>
   );
 };

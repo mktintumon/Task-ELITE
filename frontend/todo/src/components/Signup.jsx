@@ -36,6 +36,7 @@ export default function Signup() {
     }
   }, [name, email, password, captcha]);
 
+  
   useEffect(() => {
     const randNum = randomNumberInRange(1,5000);
     setRandom(randNum);
@@ -50,6 +51,7 @@ export default function Signup() {
     randomNumberInRange(1,5000)
   }, [refresh]);
 
+
   async function save(event) {
     event.preventDefault();
     
@@ -61,6 +63,7 @@ export default function Signup() {
         password: password,
         captcha: captcha,
       });
+
 
       if (response.data === "success") {
         alert("Registration Successful😊👌");

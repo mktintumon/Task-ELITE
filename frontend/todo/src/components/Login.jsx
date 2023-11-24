@@ -70,6 +70,7 @@ export default function Login() {
 
         setEmail("");
         setPassword("");
+        alert("Login successful😊");
         navigateTo("/todo", { state: { userId: response.data.userId } });
         window.location.reload();
       } else {

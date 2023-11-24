@@ -24,21 +24,21 @@ import cn.apiclub.captcha.Captcha;
 @CrossOrigin("*")
 public class UserController {
 
-    private HashMap<Integer, String> hm = new HashMap<>();
-
+    
     @Autowired
     UserService userService;
-
+    
     @Autowired
     CaptchaService captchaService;
-
+    
     private void setUpCaptcha(User user) {
         Captcha captcha = CaptchaService.createCaptcha(200, 50);
         user.setHiddenCaptcha(captcha.getAnswer());
         user.setCaptcha("");
         user.setRealCaptcha(captchaService.encodeCaptcha(captcha));
     }
-
+    
+    private HashMap<Integer, String> hm = new HashMap<>();
     Captcha captcha;
 
     @GetMapping("/captcha/{randomId}")
