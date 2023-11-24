@@ -66,9 +66,4 @@ public class User {
     @Transient
 	private String captcha;
 	
-	@Transient
-	private String hiddenCaptcha;
-	
-	@Transient
-	private String realCaptcha;
 }

@@ -24,26 +24,17 @@ import cn.apiclub.captcha.Captcha;
 @CrossOrigin("*")
 public class UserController {
 
-    
     @Autowired
     UserService userService;
-    
+
     @Autowired
     CaptchaService captchaService;
-    
-    private void setUpCaptcha(User user) {
-        Captcha captcha = CaptchaService.createCaptcha(200, 50);
-        user.setHiddenCaptcha(captcha.getAnswer());
-        user.setCaptcha("");
-        user.setRealCaptcha(captchaService.encodeCaptcha(captcha));
-    }
-    
+
     private HashMap<Integer, String> hm = new HashMap<>();
-    Captcha captcha;
 
     @GetMapping("/captcha/{randomId}")
     public CaptchaResponse generateCaptcha(@PathVariable("randomId") int randomId) {
-        captcha = CaptchaService.createCaptcha(200, 50);
+        Captcha captcha = CaptchaService.createCaptcha(200, 50);
         System.out.println(captcha.getAnswer());
         hm.put(randomId, captcha.getAnswer());
         return new CaptchaResponse(captchaService.encodeCaptcha(captcha));
@@ -51,17 +42,23 @@ public class UserController {
 
     @PostMapping("/register/{randomId}")
     public ResponseEntity<?> createUser(@PathVariable("randomId") int randomId, @RequestBody User user) {
-
         String code = hm.get(randomId);
-        System.out.println(code);
-        System.out.println(user.getCaptcha());
 
         if (user.getCaptcha().equals(code)) {
             userService.saveUser(user);
             return ResponseEntity.ok("success");
         }
-        setUpCaptcha(user);
         return ResponseEntity.ok("failed");
+    }
+
+    @PostMapping("/login/{randomId}")
+    public User getUserByEmailAndPassword(@PathVariable("randomId") int randomId, @RequestBody User user) {
+        String code = hm.get(randomId);
+
+        if (user.getCaptcha().equals(code)) {
+            return this.userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword());
+        }
+        return null;
     }
 
     @GetMapping("/users")
@@ -77,19 +74,6 @@ public class UserController {
     @GetMapping("/users/email/{email}")
     public User getUserByEmail(@PathVariable("email") String email) {
         return this.userService.getUserByEmail(email);
-    }
-
-    @GetMapping("/login/{email}/{password}/{captcha}/{randomId}")
-    public User getUserByEmailAndPassword(@PathVariable("email") String email, @PathVariable("password") String password,
-            @PathVariable("captcha") String captcha, @PathVariable("randomId") int randomId) {
-        String code = hm.get(randomId);
-        System.out.println(code);
-        System.out.println(captcha);
-
-        if (captcha.equals(code)) {
-            return this.userService.getUserByEmailAndPassword(email,password);
-        }
-        return null;
     }
 
     @DeleteMapping("/users/{userId}")

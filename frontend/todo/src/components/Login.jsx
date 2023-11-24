@@ -56,9 +56,11 @@ export default function Login() {
     event.preventDefault();
     try {
       console.log(random);
-      const response = await axios.get(
-        `http://localhost:8081/login/${email}/${password}/${captcha}/${random}`
-      );
+      const response = await axios.post(`http://localhost:8081/login/${random}`, {
+        email: email,
+        password: password,
+        captcha: captcha,
+      });
 
       console.log(response);
 

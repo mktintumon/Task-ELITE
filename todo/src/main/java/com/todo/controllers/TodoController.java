@@ -34,12 +34,6 @@ public class TodoController {
         return new ResponseEntity<>(todos, HttpStatus.OK);
     }
 
-    // @GetMapping("/todos/{todoId}")
-    // public Optional<Todo> getTodoById(@PathVariable("todoId") Integer todoId) {
-    //     return this.todoService.getTodoById(todoId);
-    // }
-
-
     @DeleteMapping("/todos/{userId}/{todoId}")
     public void deleteTodo( @PathVariable("userId") Integer userId,@PathVariable("todoId") Integer todoId ) {
         this.todoService.deleteTodo(userId , todoId);
