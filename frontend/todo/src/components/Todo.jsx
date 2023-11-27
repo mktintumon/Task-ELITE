@@ -10,7 +10,6 @@ const Todo = () => {
   const [rerender, setRerender] = useState(false);
   const userId = localStorage.getItem("userId")
 
-  console.log(localStorage.getItem("_grecaptcha"));
 
   useEffect(() => {
     const getAllTodos = async () => {
