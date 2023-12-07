@@ -10,62 +10,34 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import RotateRightIcon from "@mui/icons-material/RotateRight";
 
 const defaultTheme = createTheme();
 
-export default function Signup() {
+export default function Signup({isLoggedIn, setIsLoggedIn}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submit, setSubmit] = useState(false);
-  const [captcha, setCaptcha] = useState("");
-  const [refresh, setRefresh] = useState(false);
-  const [random, setRandom] = useState(0);
-  const [url, setUrl] = useState("");
-
-  const randomNumberInRange = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
 
   const navigateTo = useNavigate();
 
   useEffect(() => {
-    if (name.length && email.length && password.length && captcha.length) {
+    if (name.length && email.length && password.length) {
       setSubmit(true);
     }
-  }, [name, email, password, captcha]);
-
-  
-  useEffect(() => {
-    const randNum = randomNumberInRange(1,5000);
-    setRandom(randNum);
-    console.log(randNum);
-    const getImage = async () => {
-      const response = await axios.get(`http://localhost:8081/captcha/${randNum}`);
-      const imageUrl = response.data.imageUrl;
-      setUrl(imageUrl);
-    };
-
-    getImage();
-    randomNumberInRange(1,5000)
-  }, [refresh]);
-
+  }, [name, email, password]);
 
   async function save(event) {
     event.preventDefault();
-    
+
     try {
-      console.log(random);
-      const response = await axios.post(`http://localhost:8081/register/${random}`, {
+      const response = await axios.post(`http://localhost:8081/register`, {
         userName: name,
         email: email,
         password: password,
-        captcha: captcha,
       });
 
-
-      if (response.data === "success") {
+      if (response.data !== null) {
         alert("Registration Successful😊👌");
         setName("");
         setEmail("");
@@ -79,17 +51,18 @@ export default function Signup() {
     }
   }
 
+  const handleGoogleLogin = ()=>{
+    window.location.href = "http://localhost:8081/oauth2/authorization/google";
+  }
+
   return (
     <div
       style={{
         paddingTop: "3.5rem",
-        border: "2px solid #455d7a",
-        borderRadius: "2rem",
         width: "38rem",
         height: "33rem",
         margin: "auto",
-        marginTop: "6rem",
-        boxShadow: "5px 5px 5px 5px  gray",
+        marginTop: "4rem",
       }}
     >
       <ThemeProvider theme={defaultTheme}>
@@ -106,6 +79,18 @@ export default function Signup() {
             <Typography component="h1" variant="h4">
               Register
             </Typography>
+            <button
+              className="button"
+              onClick={handleGoogleLogin}
+            >
+              <img
+                src="icons/google.svg"
+                alt="google login"
+                className="icon"
+              ></img>
+              <span className="buttonText">Sign in with Google</span>
+            </button>
+
             <Box
               component="form"
               onSubmit={save}
@@ -146,46 +131,11 @@ export default function Signup() {
                 label="Password"
                 type="password"
                 id="password"
+                autoComplete="off"
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
               />
-
-              {/* <ReCAPTCHA
-                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                type="image"
-                onChange={onChange}
-                style={{marginLeft:"3rem"}}
-                disabled
-              /> */}
-
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-              >
-                <TextField
-                  required
-                  margin="normal"
-                  fullWidth
-                  name="captcha"
-                  label="Enter captcha"
-                  type="text"
-                  id="captcha"
-                  onChange={(e) => {
-                    setCaptcha(e.target.value);
-                  }}
-                />
-                <img
-                  src={`data:image/png;base64,${url}`}
-                  alt="captcha"
-                  height="50rem"
-                  width="150rem"
-                  style={{ borderRadius: "1rem", marginTop: "0.6rem" }}
-                />
-                <RotateRightIcon
-                  onClick={() => setRefresh(!refresh)}
-                  style={{ marginTop: "0.6rem", fontSize: "2.5rem" }}
-                />
-              </div>
 
               <Button
                 type="submit"

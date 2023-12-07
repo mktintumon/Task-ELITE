@@ -11,3 +11,39 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+a{
+  text-decoration: none;
+}
+
+/* Hooks button */
+.button {
+  cursor: pointer;
+  display: block;
+  font-size: 1rem;
+  box-sizing: content-box;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  width: 65%;
+  padding: 15px 15px;
+  border-radius: 24px;
+  border-color: transparent;
+  background-color: blanchedalmond;
+  box-shadow: 6px 6px 6px 2px gray; 
+  position: relative;
+}
+
+.buttonText {
+  color: black;
+  font-weight: bolder;
+  margin-left: 4rem;
+}
+
+.icon {
+  height: 25px;
+  width: 25px;
+  margin-left: 0px;
+  position: absolute;
+  left: 30px;
+  align-items: center;
+}

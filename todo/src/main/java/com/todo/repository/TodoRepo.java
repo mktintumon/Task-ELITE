@@ -9,7 +9,7 @@ import com.todo.entities.User;
 
 @Repository
 public interface TodoRepo extends JpaRepository<Todo,Integer>{
-    public Todo findById(int todoId);
+    public Todo findByTodoId(Long todoId);
     public Todo findByUserAndTodoId(User user , int todoId);
-    public List<Todo> findAllTodoByUser(User user);
+    public List<Todo> findAllTodoByUser(User user );
 }

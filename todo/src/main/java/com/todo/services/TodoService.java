@@ -19,9 +19,9 @@ public class TodoService {
     @Autowired
     UserRepo userRepo;
 
-    public Todo createTodo(int userId, Todo todo) {
+    public Todo createTodo(Long userId, Todo todo) {
         // Check if the user exists
-        User user = userRepo.findById(userId);
+        User user = userRepo.findByUserId(userId);
 
         Todo newTodo = new Todo();
         newTodo.setBody(todo.getBody());
@@ -31,30 +31,24 @@ public class TodoService {
         return todoRepo.save(newTodo);
     }
 
-    public List<Todo> getAllTodosByUser(int userId) {
-         User user = userRepo.findById(userId);
+    public List<Todo> getAllTodosByUser(Long userId) {
+        User user = userRepo.findByUserId(userId);
         return todoRepo.findAllTodoByUser(user);
     }
 
     
     public Optional<Todo> getTodoById(Integer todoId) {
-        Optional<Todo> todo = null;
-        try {
-            todo = this.todoRepo.findById(todoId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return todo;
+        return todoRepo.findById(todoId);
     }
 
-    public void deleteTodo(int userId , int todoId) {
-        User user = userRepo.findById(userId);
+    public void deleteTodo(Long userId , int todoId) {
+        User user = userRepo.findByUserId(userId);
         Todo todo = todoRepo.findByUserAndTodoId(user,todoId);
         todoRepo.delete(todo);
     }
 
-    public Todo updateTodo(int userId , int todoId , Todo todo) {
-        User user = userRepo.findById(userId);
+    public Todo updateTodo(Long userId , int todoId , Todo todo) {
+        User user = userRepo.findByUserId(userId);
         Todo newTodo = todoRepo.findByUserAndTodoId(user, todoId);
        
         newTodo.setBody(todo.getBody());

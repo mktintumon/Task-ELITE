@@ -3,7 +3,7 @@ import "./home.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Home = ({isLoggedIn}) => {
   const navigateTo = useNavigate();
   return (
     <div className="container">
@@ -14,14 +14,12 @@ const Home = () => {
           alt="Todo List"
           className="todo-image"
         />
-        {localStorage.getItem("userId") != null ? (
+        {isLoggedIn ? (
           <h3>
             <Link
-              onClick={navigateTo("/todo", {
-                state: { userId: localStorage.getItem("userId") },
-              })}
+              onClick={navigateTo("/todo")}
             >
-              Go to Todo dashboard
+              <u>Go to Todo dashboard</u>
             </Link>
           </h3>
         ) : (

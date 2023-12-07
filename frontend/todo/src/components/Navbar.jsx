@@ -7,24 +7,23 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import Button from "@mui/material/Button";
-import { useState } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export default function Navbar() {
-  const userName = localStorage.getItem("username");
-  const key = "userId";
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem(key) !== null
-  );
+export default function Navbar({ isLoggedIn, userName, setIsLoggedIn }) {
   const navigateTo = useNavigate();
 
-  const handleSignOut = () => {
-    localStorage.removeItem("userId");
-    localStorage.removeItem("username");
-    localStorage.removeItem("tasks");
-    setIsLoggedIn(false);
-
-    navigateTo("/login");
+  const handleSignOut = async () => {
+    try {
+      window.location.replace("http://localhost:8081/logout");
+      const res = await axios.get("http://localhost:8081/logout");
+      console.log("hello");
+      console.log(res.data);
+      setIsLoggedIn(false);
+      navigateTo("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -65,7 +64,7 @@ export default function Navbar() {
               }}
             >
               <AccountCircleIcon />
-              <p>{userName?.substring(1, userName.length - 1)}</p>
+              <p>{userName}</p>
             </div>
           )}
 
@@ -98,15 +97,15 @@ export default function Navbar() {
                 style={{
                   backgroundColor: "whitesmoke",
                   color: "black",
-                  width: "5rem",
-                  height: "2.4rem",
+                  width: "10rem",
+                  height: "2.6rem",
                   fontWeight: "700",
                   marginTop: "0.2rem",
                   marginRight: "4rem",
                 }}
-                onClick={() => navigateTo(isLoggedIn ? "/" : "/login")}
+                onClick={() => navigateTo(isLoggedIn ? "/" : "/signup")}
               >
-                LOGIN
+                LOGIN / REGISTER
               </Button>
             )}
           </Box>

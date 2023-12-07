@@ -1,9 +1,7 @@
 package com.todo.services;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,28 +13,48 @@ public class UserService {
     @Autowired
     UserRepo userRepo;
 
-     public ResponseEntity<?> saveUser(User user) {
+    public User saveUser(User user) {
 
         if (userRepo.existsByEmail(user.getEmail())) {
-            return ResponseEntity.badRequest().body("Error: Email is already in use!");
+            return null;
         }
 
         BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
         String bcPass = bcp.encode(user.getPassword());
         user.setPassword(bcPass);
-        userRepo.save(user);
-        return ResponseEntity.ok("Registration Successful");
+        
+        return userRepo.save(user);
+    }
+
+
+    public void processOAuthPostLogin(String email , String userName) {
+        User existUser = userRepo.findByEmail(email);
+
+        if (existUser == null) {
+            User newUser = new User();
+            newUser.setUserName(userName);
+            newUser.setEmail(email);
+            newUser.setSso(true);
+
+            userRepo.save(newUser);
+            System.out.println("Created new user: " + newUser);
+
+        }else {
+            System.out.println(existUser.getUserId());
+        }
+
     }
 
     public List<User> getAllUsers() {
         List<User> list = (List<User>) this.userRepo.findAll();
         return list;
     }
+    
 
-    public Optional<User> getUserById(Integer userId) {
-        Optional<User> user = null;
+    public User getUserById(Long userId) {
+        User user = null;
         try {
-            user = this.userRepo.findById(userId);
+            user = this.userRepo.findByUserId(userId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +95,7 @@ public class UserService {
         return null;
     }
 
-    public void deleteUser(int userId) {
+    public void deleteUser(Long userId) {
         userRepo.deleteById(userId);
     }
 }

@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
-//import ReCAPTCHA from "react-google-recaptcha";
 
 const defaultTheme = createTheme();
 
@@ -87,13 +86,10 @@ export default function Login() {
     <div
       style={{
         paddingTop: "3.6rem",
-        border: "2px solid #455d7a",
-        borderRadius: "2rem",
-        width: "35rem",
+        width: "30rem",
         height: "30rem",
         margin: "auto",
-        marginTop: "7rem",
-        boxShadow: "5px 5px 5px 5px  gray",
+        marginTop: "5rem",
       }}
     >
       <ThemeProvider theme={defaultTheme}>
@@ -144,11 +140,6 @@ export default function Login() {
                 }}
               />
 
-              {/* <ReCAPTCHA
-                sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-                type="image"
-                onChange={onChange}
-              /> */}
               <div
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
