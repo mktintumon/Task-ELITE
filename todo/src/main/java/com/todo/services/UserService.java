@@ -22,12 +22,11 @@ public class UserService {
         BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
         String bcPass = bcp.encode(user.getPassword());
         user.setPassword(bcPass);
-        
+
         return userRepo.save(user);
     }
 
-
-    public void processOAuthPostLogin(String email , String userName) {
+    public void processOAuthPostLogin(String email, String userName) {
         User existUser = userRepo.findByEmail(email);
 
         if (existUser == null) {
@@ -39,7 +38,7 @@ public class UserService {
             userRepo.save(newUser);
             System.out.println("Created new user: " + newUser);
 
-        }else {
+        } else {
             System.out.println(existUser.getUserId());
         }
 
@@ -49,7 +48,6 @@ public class UserService {
         List<User> list = (List<User>) this.userRepo.findAll();
         return list;
     }
-    
 
     public User getUserById(Long userId) {
         User user = null;
@@ -72,7 +70,7 @@ public class UserService {
         return user;
     }
 
-
+    // MANUAL LOGIN
     public User getUserByEmailAndPassword(String email, String password) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
          

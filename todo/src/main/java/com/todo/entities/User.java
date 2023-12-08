@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import lombok.Data;
 
 @Data
@@ -19,6 +18,7 @@ public class User {
 
     private String userName;
     private String email;
+
     private String password;
     private boolean sso = false;
 

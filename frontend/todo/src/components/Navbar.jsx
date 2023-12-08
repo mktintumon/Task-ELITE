@@ -13,14 +13,22 @@ import axios from "axios";
 export default function Navbar({ isLoggedIn, userName, setIsLoggedIn }) {
   const navigateTo = useNavigate();
 
+
+
   const handleSignOut = async () => {
     try {
-      window.location.replace("http://localhost:8081/logout");
-      const res = await axios.get("http://localhost:8081/logout");
-      console.log("hello");
-      console.log(res.data);
-      setIsLoggedIn(false);
-      navigateTo("/");
+      if(localStorage.getItem("userId") != null){
+        localStorage.clear();
+        navigateTo("/");
+        window.location.reload()
+      }
+      else{
+        window.location.replace("http://localhost:8081/logout");
+        await axios.get("http://localhost:8081/logout");
+        setIsLoggedIn(false);
+        navigateTo("/");
+      }
+    
     } catch (error) {
       console.log(error);
     }

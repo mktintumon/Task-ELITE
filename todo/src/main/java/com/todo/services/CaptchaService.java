@@ -23,7 +23,7 @@ public class CaptchaService {
 
         List<Color> colors = new ArrayList<Color>();
         colors.add(Color.GREEN);
-        colors.add(Color.BLUE);
+        colors.add(Color.RED);
         colors.add(Color.BLACK);
 
         List<Font> fonts = new ArrayList<Font>();

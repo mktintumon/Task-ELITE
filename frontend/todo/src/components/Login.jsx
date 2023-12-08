@@ -51,23 +51,25 @@ export default function Login() {
     randomNumberInRange(1, 5000);
   }, [refresh]);
 
+
   async function save(event) {
     event.preventDefault();
     try {
       console.log(random);
       const response = await axios.post(`http://localhost:8081/login/${random}`, {
-        email: email,
-        password: password,
-        captcha: captcha,
+        email,
+        password,
+        captcha,
       });
 
       console.log(response);
 
-      if (response.data.userId !== undefined) {
+      if (response.data.userId !== null) {
         const username = response.data.userName;
         const userId = response.data.userId;
         localStorage.setItem("username", JSON.stringify(username));
         localStorage.setItem("userId", JSON.stringify(userId));
+        localStorage.setItem("isLoggedIn", JSON.stringify(true));
 
         setEmail("");
         setPassword("");

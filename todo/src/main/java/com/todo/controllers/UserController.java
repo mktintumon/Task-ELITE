@@ -59,11 +59,23 @@ public class UserController {
     public User getUserByEmailAndPassword(@PathVariable("randomId") int randomId, @RequestBody User user) {
         String code = hm.get(randomId);
 
-        if (user.getCaptcha().equals(code)) {
-            return this.userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword());
+        if (user != null && user.getCaptcha() != null && user.getCaptcha().equals(code)) {
+            return userService.getUserByEmailAndPassword(user.getEmail(), user.getPassword());
         }
+
         return null;
     }
+
+    @GetMapping("/users/{userId}")
+    public User getUserById(@PathVariable("userId") Long userId) {
+        return this.userService.getUserById(userId);
+    }
+
+    @GetMapping("/users/email/{email}")
+    public User getUserByEmail(@PathVariable("email") String email) {
+        return this.userService.getUserByEmail(email);
+    }
+
 
     @GetMapping("/user")
     public ResponseEntity<?> userDetails(@AuthenticationPrincipal OAuth2User oAuth2User) {

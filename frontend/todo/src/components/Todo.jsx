@@ -4,21 +4,12 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import "./todo.css";
 
-const Todo = () => {
+const Todo = ({userId}) => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [rerender, setRerender] = useState(false);
-  const [userId , setUserId] = useState(0);
 
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:8081/user", { withCredentials: true })
-      .then((res) => {
-        console.log(res.data.userId);
-        setUserId(res.data.userId)
-      });
-  }, []);
+  console.log(userId);
 
 
   useEffect(() => {

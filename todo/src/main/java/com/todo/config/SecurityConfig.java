@@ -31,8 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(configurationSource()))
-                .csrf(csrf -> csrf
-                        .disable())
+                .csrf(csrf -> csrf.disable())
                 .authorizeRequests(requests -> requests
                         .antMatchers("/**").permitAll())
                 .oauth2Login(login -> login
